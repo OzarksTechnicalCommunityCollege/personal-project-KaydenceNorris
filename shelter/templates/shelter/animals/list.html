@@ -1,0 +1,18 @@
+{% extends "shelter/base.html" %}
+{% block title %}Animal Shelter{% endblock %}
+{% block content %}
+  <h1>Animals Available</h1>
+  <!-- Makes a for loop for every animal in my list nad displays their names and info about them. In the future I want to just have an image and name card that you click on for the rest of the info -->
+  {% for animal in animals %}
+    <h2>
+        {{ animal.name}}
+    </h2>
+
+    <div class="info">
+        <img src="{{animal.img.url}}"><!-- I added images becasue I felt it looked wird without them.-->
+
+        <p>Age: {{animal.age}} Species: {{animal.species}} Breed: {{animal.breed}} Description: {{animal.desc}}</p>
+    </div>
+    
+  {% endfor %}
+{% endblock %}
