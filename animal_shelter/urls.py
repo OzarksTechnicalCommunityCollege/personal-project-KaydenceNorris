@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('shelter/', include('shelter.urls', namespace='shelter')),
+    path('', include('shelter.urls', namespace='shelter')),
 ]
 
 if settings.DEBUG: # Stuff to make iamges work

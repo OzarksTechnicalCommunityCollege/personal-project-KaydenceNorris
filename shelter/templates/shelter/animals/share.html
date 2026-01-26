@@ -1,0 +1,15 @@
+{% extends "shelter/base.html" %}
+{% block title %}Share{% endblock %}
+{% block content %}
+    {% if sent %}
+        </h1>Success</h1>
+        <p>"{{ animal.name }} has been shared with {{ form.cleaned_data.to}}"</p>
+    {% else %}
+        <h1>Share {{animal.name}} by Email</h1>
+        <form method="post" >
+            {{ form.as_p }}
+            {% csrf_token %}
+            <input type="submit" value="Send">
+        </form>
+    {% endif %}
+{% endblock %}

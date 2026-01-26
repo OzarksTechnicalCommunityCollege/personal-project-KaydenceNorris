@@ -1,0 +1,20 @@
+{% extends "shelter/base.html" %}
+
+{% block title %}{{animal.name}}{% endblock %}
+
+{% block content %}
+
+    <h1>{{animal_profile.name}}</h1>
+
+    <div class="info">
+        <img src="{{animal_profile.img.url}}">
+        <p class = "animal_a/b">Age: {{animal_profile.age}} Breed: {{animal_profile.breed}}</p>
+        <p class = "animal_desc">{{animal_profile.desc}}</p>
+    </div>
+
+    <p>
+        <a href="{% url "shelter:animal_share" animal_profile.id %}">
+        Share this animal</a>
+    </p>
+
+{% endblock %}

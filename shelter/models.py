@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 class AdoptableManager(models.Manager): # This checks to see if is adopted is true or not. If it is true, it can be filtered out later
@@ -13,6 +14,7 @@ class Animal(models.Model): # this is my animal model.
     age = models.IntegerField()
     species = models.CharField(max_length=30)
     breed = models.CharField(max_length=100)
+    unique_for_breed = "name"
     is_adopted = models.BooleanField(default=False)
     desc = models.CharField(max_length=250)
     object = models.Manager()
@@ -25,4 +27,7 @@ class Animal(models.Model): # this is my animal model.
 
     def __str__(self):
         return self.name
+    
+    def get_absoulute_url(self):
+        return reverse('shelter:animal_view', args = [self.species,self.breed,self.name])
 
