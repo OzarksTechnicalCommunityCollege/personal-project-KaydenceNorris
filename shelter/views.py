@@ -4,14 +4,37 @@ from django import http
 from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView
-from .forms import EmailAnimalForm
+from .forms import EmailAnimalForm, SearchForm
 from django.core.mail import send_mail
+from taggit.models import Tag
+from django.contrib.postgres.search import SearchVector
 
 
 
 # Create your views here.
-def animal_list(request): # Shows all animals. I followed the book pretty close on the project becuase I didn't feel comfortable going to far out
+def animal_search(request):
+    form = SearchForm()
+    query = None
+    results = []
+
+    if 'query' in request.GET:
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            results = (Animal.adoptable.annotate(search=SearchVector('species', 'breed'),).filter(search=query))
+    return render(request, 'shelter/animals/search.html',{
+        'form':form,
+        'query':query,
+        'results':results
+    })
+
+
+def animal_list(request, tag_slug =None): # Shows all animals.
     animal_list = Animal.adoptable.all()
+    tag = None
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug = tag_slug)
+        animal_list = animal_list.filter(tags__in=[tag])
     paginator = Paginator(animal_list, 2)
     page_number = request.GET.get('page',1)
     try:
@@ -23,7 +46,9 @@ def animal_list(request): # Shows all animals. I followed the book pretty close 
     return render(
         request,
         'shelter/animals/list.html',
-        {'animals': animals}
+        {'animals': animals,
+         'tag': tag,
+        }
     )
 
 def animal_view(request, species,breed,name):

@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'shelter.apps.ShelterConfig'
+    'django.contrib.postgres',
+    'taggit',
+    'shelter.apps.ShelterConfig',
 ]
 
 MIDDLEWARE = [
@@ -77,8 +79,11 @@ WSGI_APPLICATION = 'animal_shelter.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config("DB_PASSWORD"),
+        'HOST': config('DB_HOST'),
     }
 }
 
@@ -122,9 +127,9 @@ STATIC_URL = 'static/'
 MEDIA_URL = '/media/' # stuff to make the images work. This was mostly AI with me trial and erroring on top of it
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL =config('DEFAULT_FROM_EMAIL')
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# DEFAULT_FROM_EMAIL =config('DEFAULT_FROM_EMAIL')

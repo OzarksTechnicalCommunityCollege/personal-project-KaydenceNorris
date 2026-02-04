@@ -1,0 +1,26 @@
+{% extends "shelter/base.html" %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+
+   {% if query %}
+    <h1>Results for {{ query }}</h1>
+    {% for animal in results %}
+        <h3><a href="{{ animal.get_absoulute_url }}">{{ animal.name }}</a></h3>
+        <img src="{{animal.img.url}}"">
+
+        {% empty %}
+
+            <p>No results</p>
+    
+        {% endfor %}
+    {% else %}
+        <h1>Search</h1>
+        <form method="get">
+            {{ form.as_p }}
+            <input type="submit" value="Search">
+        </form>
+    {% endif %}
+
+{% endblock %}

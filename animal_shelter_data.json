@@ -1,0 +1,55 @@
+[
+{
+  "model": "shelter.animal",
+  "pk": 1,
+  "fields": {
+    "img": "img/rocky.webp",
+    "name": "Rocky",
+    "age": 2,
+    "species": "Dog",
+    "breed": "Husky",
+    "is_adopted": false,
+    "desc": "Loud and Energetic"
+  }
+},
+{
+  "model": "shelter.animal",
+  "pk": 2,
+  "fields": {
+    "img": "img/Lola.webp",
+    "name": "Lola",
+    "age": 8,
+    "species": "Cat",
+    "breed": "Tabby",
+    "is_adopted": false,
+    "desc": "Calm and shy"
+  }
+},
+{
+  "model": "shelter.animal",
+  "pk": 3,
+  "fields": {
+    "img": "img/buster.webp",
+    "name": "Buster",
+    "age": 1,
+    "species": "Dog",
+    "breed": "Great Dane",
+    "is_adopted": true,
+    "desc": "Energetic"
+  }
+},
+{
+  "model": "shelter.animal",
+  "pk": 4,
+  "fields": {
+    "img": "img/kiki.webp",
+    "name": "Kiki",
+    "age": 1,
+    "species": "Cat",
+    "breed": "American Shorthair",
+    "is_adopted": false,
+    "desc": "Curious and relaxed"
+  }
+}
+]
+
