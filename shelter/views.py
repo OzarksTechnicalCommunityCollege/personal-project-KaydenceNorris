@@ -4,10 +4,13 @@ from django import http
 from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView
-from .forms import EmailAnimalForm, SearchForm
+from .forms import EmailAnimalForm, SearchForm, LoginForm
 from django.core.mail import send_mail
 from taggit.models import Tag
 from django.contrib.postgres.search import SearchVector
+from django.contrib.auth import authenticate, login
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 
 
 
@@ -94,3 +97,26 @@ def animal_share(request, animal_id):
             'form': form,
             'sent': sent
             })
+
+def user_login(request):
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            user = authenticate(
+                request,
+                username=cd['username'],
+                password=cd['password'],
+            )
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    return HttpResponse("Successful!")
+                else:
+                    return HttpResponse("Unsuccesseful")
+            else:
+                return HttpResponse("Invalid login")
+    else:
+        form = LoginForm()
+    return render(request, 'shelter/login.html', {'form':form})
+
