@@ -1,4 +1,5 @@
 {% extends "shelter/base.html" %}
+{% load static %}
 
 {% block title %}{{animal.name}}{% endblock %}
 
@@ -17,4 +18,8 @@
         Share this animal</a>
     </p>
 
+    <!-- Button to give animals a treat -->
+    <button id="treat">Give me a treat</button>
+    <p id="eat"></p>
+    <script  src="{% static 'shelter/js/treat.js' %}"></script>
 {% endblock %}
