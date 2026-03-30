@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+<h1>Volunteers & Their Animals</h1>
+{% for volunteer in volunteers %}
+  <h2>{{ volunteer.name }}</h2>
+  <ul>
+    {% for care in volunteer.volunteeranimalcare_set.all %}
+      <li>{{ care.animal.name }} — {{ care.get_role_display }} (since {{ care.start_date }})</li>
+    {% empty %}
+      <li>No animals assigned yet.</li>
+    {% endfor %}
+  </ul>
+{% endfor %}

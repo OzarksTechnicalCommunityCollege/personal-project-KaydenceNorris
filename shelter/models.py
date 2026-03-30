@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from taggit.managers import TaggableManager
+from django.utils import timezone
 
 # Create your models here.
 class AdoptableManager(models.Manager): # This checks to see if is adopted is true or not. If it is true, it can be filtered out later
@@ -32,4 +33,44 @@ class Animal(models.Model): # this is my animal model.
     
     def get_absoulute_url(self):
         return reverse('shelter:animal_view', args = [self.species,self.breed,self.name])
+    
+class Volunteer(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField(unique=True)
+    phone = models.CharField(max_length=15, blank=True)
+    joined_date = models.DateField(default=timezone.now)
+    is_active = models.BooleanField(default=True)
+    animals = models.ManyToManyField(Animal, through='VolunteerAnimalCare', related_name='volunteers')
+
+    def __str__(self):
+        return self.name
+class VolunteerAnimalCare(models.Model):
+    ROLE_CHOICES = [
+        ('walker', 'Dog Walker'),
+        ('feeder', 'Feeder'),
+        ('trainer', 'Trainer'),
+        ('medical', 'Medical Assistant'),
+    ]
+    # The two FK sides of the M2M
+    volunteer = models.ForeignKey(Volunteer, on_delete=models.CASCADE)
+    animal = models.ForeignKey(Animal, on_delete=models.CASCADE)
+    # Custom fields
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='walker')
+    start_date = models.DateField(default=timezone.now)
+
+    class Meta:
+        unique_together = ('volunteer', 'animal')  # prevent duplicate assignments
+
+    def __str__(self):
+        return f"{self.volunteer.name} cares for {self.animal.name} ({self.role})"
+    
+class Adoption(models.Model):
+    animal = models.OneToOneField(Animal, on_delete=models.CASCADE)
+    adopter_name = models.CharField(max_length=100)
+    adoption_date = models.DateField(default=timezone.now)
+
+    def __str__(self):
+        return f"{self.adopter_name} adopted {self.animal.name}"
+    
+
 

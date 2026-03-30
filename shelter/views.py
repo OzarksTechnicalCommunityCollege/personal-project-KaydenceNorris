@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Animal
+from .models import Animal, Volunteer
 from django import http
 from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -11,6 +11,7 @@ from django.contrib.postgres.search import SearchVector
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
 
 
 
@@ -119,4 +120,29 @@ def user_login(request):
     else:
         form = LoginForm()
     return render(request, 'shelter/login.html', {'form':form})
+
+def volunteer_list(request):
+    # prefetch_related fetches all related animals in 1 extra query instead of N
+    volunteers = Volunteer.objects.prefetch_related(
+        'volunteeranimalcare_set__animal'  # traverses through the intermediary table
+    ).all()
+    return render(request, 'shelter/volunteer_list.html', {'volunteers': volunteers})
+
+
+def animal_stats(request):
+    # Try to get from Redis cache first
+    animal_count = cache.get('animal_count')
+
+    if animal_count is None:
+        # Cache miss — query the DB and store in Redis for 60 seconds
+        animal_count = Animal.objects.count()
+        cache.set('animal_count', animal_count, timeout=60)
+        source = "database"
+    else:
+        source = "Redis cache"
+
+    return render(request, 'shelter/stats.html', {
+        'animal_count': animal_count,
+        'source': source,
+    })
 
