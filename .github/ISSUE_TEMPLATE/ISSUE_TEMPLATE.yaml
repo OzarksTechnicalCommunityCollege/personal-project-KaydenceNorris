@@ -1,24 +1,24 @@
-name: Peer Fedback report
+name: Peer Feedback Report
 description: Leave meaningful feedback for your reviewee
 title: "[Feedback]: "
 labels: ["test1", "test2"]
 projects: ["octo-org/1", "octo-org/44"]
 assignees:
-- octocat
+  - octocat
 body:
-- type: markdown
-attributes:
-value: |
-- type: dropdown
-id: outcome_1
-attributes:
-label: Outcome 1
-description: Which outcome are you assessing? See the Canvas rubric for a
-list of outcomes.
-options:
-- 1.01- Translate user need/request into actionable project specifications
-- 1.02- Break complex functions into manageable modules and functions
-- 1.03- Use source control best-practices to manage a code-base
+  - type: markdown
+    attributes:
+      value: |
+        Please complete all fields below using the Canvas rubric as reference.
+  - type: dropdown
+    id: outcome_1
+    attributes:
+      label: Outcome 1
+      description: Which outcome are you assessing? See the Canvas rubric for a list of outcomes.
+      options:
+        - 1.01- Translate user need/request into actionable project specifications
+        - 1.02- Break complex functions into manageable modules and functions
+        - 1.03- Use source control best-practices to manage a code-base
 - 1.04- Provide constructive feedback on a peer's code within the framework
 of code review/pull request
 - 2.01- Override class methods to customize object behaviors
