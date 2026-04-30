@@ -1,4 +1,4 @@
-name: Peer Feedback report
+name: Peer Fedback report
 description: Leave meaningful feedback for your reviewee
 title: "[Feedback]: "
 labels: ["test1", "test2"]
@@ -9,7 +9,7 @@ body:
 - type: markdown
 attributes:
 value: |
-
+thanks: Thanks for taking the time to fill out this feedback form!
 - type: dropdown
 id: outcome_1
 attributes:
