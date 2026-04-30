@@ -36,6 +36,7 @@ def animal_search(request):
 
 def animal_list(request, tag_slug =None): # Shows all animals.
     animal_list = Animal.adoptable.all()
+    favorite_ids = request.session.get('favorite_animals', [])
     tag = None
     if tag_slug:
         tag = get_object_or_404(Tag, slug = tag_slug)
