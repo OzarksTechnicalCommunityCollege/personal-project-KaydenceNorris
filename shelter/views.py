@@ -13,6 +13,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.http import JsonResponse
+from .favorite import Favorite
 
 
 
@@ -36,7 +37,7 @@ def animal_search(request):
 
 def animal_list(request, tag_slug =None): # Shows all animals.
     animal_list = Animal.adoptable.all()
-    favorite_ids = request.session.get('favorite_animals', [])
+    favorites = Favorite(request)
     tag = None
     if tag_slug:
         tag = get_object_or_404(Tag, slug = tag_slug)
@@ -54,6 +55,7 @@ def animal_list(request, tag_slug =None): # Shows all animals.
         'shelter/animals/list.html',
         {'animals': animals,
          'tag': tag,
+         'favorites': favorites,
         }
     )
 
