@@ -1,0 +1,19 @@
+{% extends "shelter/base.html" %}
+
+{% for animal in animals %}
+<div class="animal-card">
+  <h3>{{ animal.name }}</h3>
+  <p>{{ animal.species }} · {{ animal.age }}</p>
+
+  <form method="post" action="{% url 'toggle_favorite' animal.id %}">
+    {% csrf_token %}
+    <button type="submit">
+      {% if animal.id in favorite_ids %}
+        Remove from Favorites
+      {% else %}
+        Add to Favorites
+      {% endif %}
+    </button>
+  </form>
+</div>
+{% endfor %}
