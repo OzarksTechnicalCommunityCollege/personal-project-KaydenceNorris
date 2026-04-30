@@ -1,8 +1,8 @@
 import os
 from celery import Celery
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'yourproject.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'shelter.settings')
 
-app = Celery('yourproject')
+app = Celery('shelter')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks()

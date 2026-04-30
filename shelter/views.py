@@ -15,6 +15,7 @@ from django.core.cache import cache
 from django.http import JsonResponse, HttpResponseRedirect
 from .favorite import Favorite
 from django.urls import reverse
+from .tasks import send_favorite_confirmation
 
 
 
@@ -159,6 +160,14 @@ def toggle_favorite(request, animal_id):
     animal = get_object_or_404(Animal, pk=animal_id)
     favorites = Favorite(request)
     favorites.toggle(animal)
+
+    # Fire the email task only when adding (not removing) a favorite
+    if animal in favorites and request.user.is_authenticated:
+        send_favorite_confirmation.delay(
+            animal_name=animal.name,
+            animal_species=animal.species,
+            user_email=request.user.email,
+        )
 
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         return JsonResponse({'count': len(favorites), 'is_favorited': animal in favorites})
