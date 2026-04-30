@@ -45,6 +45,11 @@ INSTALLED_APPS = [
      'debug_toolbar',
 ]
 
+CELERY_BROKER_URL = 'amqp://guest:guest@localhost//'   # default RabbitMQ credentials
+CELERY_RESULT_BACKEND = 'rpc://'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',

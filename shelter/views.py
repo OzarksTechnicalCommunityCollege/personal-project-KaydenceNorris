@@ -165,7 +165,10 @@ def toggle_favorite(request, animal_id):
     return HttpResponseRedirect(reverse('animal_list'))
 
 def favorites_page(request):
-    favorite_ids = request.session.get('favorite_animals', [])
-    favorite_animals = Animal.objects.filter(pk__in=favorite_ids)
-    return render(request, 'favorites.html', {'animals': favorite_animals})
+    favorites = Favorite(request)
+    animals = Animal.objects.filter(pk__in=favorites.get_ids())
+    return render(request, 'shelter/favorites.html', {
+        'animals': animals,
+        'favorites': favorites,
+    })
 
