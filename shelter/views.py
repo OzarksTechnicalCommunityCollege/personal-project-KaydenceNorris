@@ -12,8 +12,9 @@ from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from .favorite import Favorite
+from django.urls import reverse
 
 
 
@@ -151,23 +152,17 @@ def animal_stats(request):
     })
 
 def get_favorite(request):
-    return request.session.get('favorite_animals', [])
+     favorites = Favorite(request)
+     return JsonResponse({'favorites': favorites.get_ids(), 'count': len(favorites)})
 
 def toggle_favorite(request, animal_id):
-    get_object_or_404(Animal, pk=animal_id)
-
-    favorites = request.session.get('favorite_animals', [])
-
-    if animal_id in favorites:
-        favorites.remove(animal_id)
-    else:
-        favorites.append(animal_id)
-
-    request.session['favorite_animals'] = favorites
+    animal = get_object_or_404(Animal, pk=animal_id)
+    favorites = Favorite(request)
+    favorites.toggle(animal)
 
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        return JsonResponse({'favorites': favorites, 'count': len(favorites)})
-    return render('animal_list')
+        return JsonResponse({'count': len(favorites), 'is_favorited': animal in favorites})
+    return HttpResponseRedirect(reverse('animal_list'))
 
 def favorites_page(request):
     favorite_ids = request.session.get('favorite_animals', [])
